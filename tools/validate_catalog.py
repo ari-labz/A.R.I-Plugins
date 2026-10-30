@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Checks catalog.json: every entry is well formed, and every version's download exists and matches its SHA-256.
 Run by the pull-request check, and by hand: validate_catalog.py [catalog.json]. Exits non-zero on the first problem found."""
-import hashlib, json, re, sys, urllib.request, zipfile, io
+import hashlib, json, re, subprocess, sys, zipfile, io
 
 ID = re.compile(r"^[a-z][a-z0-9_]{1,40}$")
 
@@ -21,7 +21,10 @@ def main():
         for v in p["versions"]:
             if not v.get("version") or not v.get("url") or not v.get("sha256"): fail(f"{pid}: a version needs version, url and sha256")
             if not v["url"].startswith("https://"): fail(f"{pid} {v['version']}: the download must be an https address")
-            data = urllib.request.urlopen(v["url"], timeout=120).read()
+            # curl, not urllib: urllib mangles the signed redirect GitHub sends for some release files.
+            got = subprocess.run(["curl", "-fsSL", "--max-time", "180", v["url"]], capture_output=True)
+            if got.returncode != 0: fail(f"{pid} {v['version']}: couldn't download {v['url']}")
+            data = got.stdout
             if hashlib.sha256(data).hexdigest() != v["sha256"].lower(): fail(f"{pid} {v['version']}: the download doesn't match its sha256")
             try: z = zipfile.ZipFile(io.BytesIO(data))
             except zipfile.BadZipFile: fail(f"{pid} {v['version']}: not a zip")
