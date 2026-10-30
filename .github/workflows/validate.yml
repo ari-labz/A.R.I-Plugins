@@ -1,0 +1,10 @@
+name: Check the catalog
+on:
+  pull_request:
+    paths: [catalog.json]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/validate_catalog.py catalog.json

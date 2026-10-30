@@ -1,0 +1,43 @@
+# A plugin's own repo calls this to turn a tag into a release with <id>.ari attached:
+#
+#   on: { push: { tags: ["v*"] } }
+#   jobs:
+#     release:
+#       uses: ari-labz/A.R.I-Plugins/.github/workflows/release-plugin.yml@main
+#       with: { id: weather, name: Weather, description: "Current weather for Ari.", author: someone, source: "." }
+#       permissions: { contents: write }
+#
+# Use `project` and `entry` instead of `source` for a plugin that has to be built.
+name: Release a plugin
+on:
+  workflow_call:
+    inputs:
+      id:          { type: string, required: true }
+      name:        { type: string, required: true }
+      description: { type: string, required: true }
+      author:      { type: string, default: "" }
+      source:      { type: string, default: "", description: "Folder of .cs files (a source plugin)" }
+      project:     { type: string, default: "", description: ".csproj to build (a built plugin)" }
+      entry:       { type: string, default: "", description: "The built plugin's .dll name" }
+      icon:        { type: string, default: "icon.png" }
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions: { contents: write }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: { repository: ari-labz/A.R.I-Plugins, path: .A.R.I-Plugins }
+      - uses: actions/checkout@v4
+        with: { repository: ari-labz/A.R.I, path: .ari-host, submodules: recursive }
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: "10.0.x" }
+      - name: Pack
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          ARGS=(--id "${{ inputs.id }}" --name "${{ inputs.name }}" --description "${{ inputs.description }}" --author "${{ inputs.author }}" --version "$VERSION" --out "${{ inputs.id }}.ari")
+          [ -f "${{ inputs.icon }}" ] && ARGS+=(--icon "${{ inputs.icon }}")
+          if [ -n "${{ inputs.source }}" ]; then ARGS+=(--source "${{ inputs.source }}"); else ARGS+=(--project "${{ inputs.project }}" --entry "${{ inputs.entry }}" --host .ari-host/Server/ARI.LLM/ARI.LLM.csproj --prop "AriHost=$GITHUB_WORKSPACE/.ari-host/Server"); fi
+          python3 .A.R.I-Plugins/tools/pack_ari.py "${ARGS[@]}"
+      - uses: softprops/action-gh-release@v2
+        with: { files: "${{ inputs.id }}.ari" }

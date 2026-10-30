@@ -1,0 +1,43 @@
+{
+  "name": "A.R.I Plugins",
+  "plugins": [
+    {
+      "id": "discord",
+      "name": "Discord",
+      "description": "Reads and replies to messages in Discord servers and DMs, and joins voice channels. Adds five tools so Ari can DM people, report back, and move between voice channels.",
+      "author": "first-party",
+      "icon": "https://raw.githubusercontent.com/ari-labz/Discord-Plugin/main/icon.png",
+      "repo": "https://github.com/ari-labz/Discord-Plugin",
+      "featured": true,
+      "versions": [
+        {
+          "version": "1.0.0",
+          "url": "https://github.com/ari-labz/Discord-Plugin/releases/download/v1.0.0/discord.ari",
+          "sha256": "a7828778d47f93db6b538103efdd0aaacf8668314a8b186d632eb52eba2f51c2",
+          "size": 6142704,
+          "changelog": "First version.",
+          "date": "2026-10-30"
+        }
+      ]
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "description": "Gives Ari your GitHub account for issues, pull requests, releases and Actions, through GitHub's own CLI. You approve a short code on GitHub itself, so she never sees a token.",
+      "author": "first-party",
+      "icon": "https://raw.githubusercontent.com/ari-labz/Github-Plugin/main/icon.png",
+      "repo": "https://github.com/ari-labz/Github-Plugin",
+      "featured": true,
+      "versions": [
+        {
+          "version": "1.0.0",
+          "url": "https://github.com/ari-labz/Github-Plugin/releases/download/v1.0.0/github.ari",
+          "sha256": "3530bbb9a92779234e629a0d2823e4e8a260f4af5c59b85e921a08409dacaeff",
+          "size": 34687,
+          "changelog": "First version.",
+          "date": "2026-10-30"
+        }
+      ]
+    }
+  ]
+}
