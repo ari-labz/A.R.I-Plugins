@@ -54,6 +54,25 @@
           "date": "2026-10-30"
         }
       ]
+    },
+    {
+      "id": "websearch",
+      "name": "Web Search",
+      "description": "Lets Ari search the web through SearXNG. Runs SearXNG for you in Docker, or uses one you already run. Needs ARI 0.12.0 or later.",
+      "author": "first-party",
+      "icon": "https://raw.githubusercontent.com/ari-labz/Web-Search-Plugin/main/icon.png",
+      "repo": "https://github.com/ari-labz/Web-Search-Plugin",
+      "featured": true,
+      "versions": [
+        {
+          "version": "1.0.0",
+          "url": "https://github.com/ari-labz/Web-Search-Plugin/releases/download/v1.0.0/websearch.ari",
+          "sha256": "27f3d3057a1213e65eca265d5ffd6a9de007f3576afa5708842c1d81b38a1660",
+          "size": 28824,
+          "changelog": "First version.",
+          "date": "2026-11-25"
+        }
+      ]
     }
   ]
 }
